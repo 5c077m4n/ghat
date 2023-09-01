@@ -28,7 +28,7 @@
 				gum spin --title "Pulling..." -- git pull --rebase "$(git branch --show-current)"
 				;;
 			EXIT)
-				exit
+				exit 0
 				;;
 			*)
 				;;
