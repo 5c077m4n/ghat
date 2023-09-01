@@ -9,7 +9,7 @@
 	fi
 
 	while true; do
-		local action="$(echo 'PWD\nWrite\nMessages\nReword\nContacts\nPull\nEXIT' | gum filter)"
+		local action="$(echo 'PWD\nWrite\nMessages\nReword\nContacts\nNewContact\nPull\nEXIT' | gum filter)"
 		case "$action" in
 			PWD)
 				gum confirm "$(pwd)"
@@ -29,6 +29,10 @@
 			Contacts)
 				local contact="$(git branch --format='%(refname:short)' | gum filter)"
 				git checkout $contact
+				;;
+			NewContact)
+				local contact="$(gum input --placeholder "New contact's name")"
+				git checkout -b $contact
 				;;
 			Pull)
 				gum spin --title "Pulling..." -- git pull --rebase origin "$(git branch --show-current)"
