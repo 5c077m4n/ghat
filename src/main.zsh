@@ -9,7 +9,7 @@
 	fi
 
 	while true; do
-		local action="$(echo 'PWD\nWrite\nMessages\nContacts\nPull\nEXIT' | gum filter)"
+		local action="$(echo 'PWD\nWrite\nMessages\nReword\nContacts\nPull\nEXIT' | gum filter)"
 		case "$action" in
 			PWD)
 				gum confirm "$(pwd)"
@@ -20,12 +20,18 @@
 			Messages)
 				git log --format='%H' | fzf --preview 'git show {}'
 				;;
+			Reword)
+				local msg_hash="$(git log --format='%H' | fzf --preview 'git show {}')"
+
+				git commit --fixup="reword:$msg_hash" --allow-empty
+				git rebase --autostash --autosquash --interactive "${msg_hash}^"
+				;;
 			Contacts)
 				local contact="$(gum choose --limit 1 $(git branch --format='%(refname:short)'))"
 				git checkout $contact
 				;;
 			Pull)
-				gum spin --title "Pulling..." -- git pull --rebase "$(git branch --show-current)"
+				gum spin --title "Pulling..." -- git pull --rebase origin "$(git branch --show-current)"
 				;;
 			EXIT)
 				exit 0
