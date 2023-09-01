@@ -27,7 +27,7 @@
 				git rebase --autostash --autosquash --interactive "${msg_hash}^"
 				;;
 			Contacts)
-				local contact="$(gum choose --limit 1 $(git branch --format='%(refname:short)'))"
+				local contact="$(git branch --format='%(refname:short)' | gum filter)"
 				git checkout $contact
 				;;
 			Pull)
